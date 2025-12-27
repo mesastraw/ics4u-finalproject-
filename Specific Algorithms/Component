@@ -1,1 +1,25 @@
+Enum Type:
+  -RESISTOR
+  -POWERSOURCE
+  -WIRE
+  -MODULE
+  -SWITCH
+
+Circuit is composed of abstract Component class
+	Initialize attributes
+    -type as a Type Enum
+    -position as a Vector
+    -voltage as a double
+    -current as a double
+    -resistance as a double
+    -power as a double
+    -name as a String
+    -direction as a String
+
+	public void displayPopup()
+    -Create a popup window and create an input field for every attribute that can change (this method changes the number of fields depending on the subclass)
+      -Example: resistance and colour
+      -This window will also be equipped with a delete button to call deleteComponent and a save button to save the new configuration of the component
+    -Calculate the voltage, current and resistance at this Component by looping through the components and looking at all values up to this
+
 
