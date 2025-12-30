@@ -57,9 +57,9 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="usernameField" min="-2" pref="138" max="-2" attributes="0"/>
-                              <Component id="passwordField" min="-2" pref="138" max="-2" attributes="0"/>
                               <Component id="jLabel3" min="-2" pref="75" max="-2" attributes="0"/>
                               <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="passwordField" alignment="0" min="-2" pref="138" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
                       </Group>
@@ -133,6 +133,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Login"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loginBtnActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
@@ -157,14 +160,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="usernameField">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usernameFieldActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JPasswordField" name="passwordField">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="passwordFieldActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
@@ -181,6 +176,8 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Username:"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="passwordField">
         </Component>
       </SubComponents>
     </Container>

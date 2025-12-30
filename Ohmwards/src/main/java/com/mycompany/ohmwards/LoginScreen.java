@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.ohmwards;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,9 +36,9 @@ public class LoginScreen extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         usernameField = new javax.swing.JTextField();
-        passwordField = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        passwordField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,6 +54,7 @@ public class LoginScreen extends javax.swing.JFrame {
         loginBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         loginBtn.setForeground(new java.awt.Color(255, 255, 255));
         loginBtn.setText("Login");
+        loginBtn.addActionListener(this::loginBtnActionPerformed);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -60,10 +63,6 @@ public class LoginScreen extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Login Page");
-
-        usernameField.addActionListener(this::usernameFieldActionPerformed);
-
-        passwordField.addActionListener(this::passwordFieldActionPerformed);
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Password:");
@@ -85,9 +84,9 @@ public class LoginScreen extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(120, 120, 120))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -136,19 +135,36 @@ public class LoginScreen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_usernameFieldActionPerformed
-
-    private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_passwordFieldActionPerformed
-
     private void returnBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnBtnActionPerformed
         MainMenu menu = new MainMenu();
         menu.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_returnBtnActionPerformed
+
+    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
+        // Check if both fields are filled out
+        if(usernameField.getText().isBlank() || passwordField.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "Please fill out both fields...", "Error", JOptionPane.ERROR_MESSAGE); 
+        }
+        else{
+            // Check for account existence (via username) <-- Searches the accounts 2D ArrayList
+            for(ArrayList<String> account:Ohmwards.accounts){
+                if(account.get(0).equals(usernameField.getText().strip())){
+                    if(account.get(1).equals(passwordField.getText().strip())){
+                        HomePage menu = new HomePage();
+                        menu.setVisible(true);
+                        this.setVisible(false);
+                        return;
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Invalid password, try again...", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Account does not exist, Try again or create new account!", "Error", JOptionPane.ERROR_MESSAGE); 
+        }
+    }//GEN-LAST:event_loginBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,7 +198,7 @@ public class LoginScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton loginBtn;
-    private javax.swing.JPasswordField passwordField;
+    private javax.swing.JTextField passwordField;
     private javax.swing.JButton returnBtn;
     private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables

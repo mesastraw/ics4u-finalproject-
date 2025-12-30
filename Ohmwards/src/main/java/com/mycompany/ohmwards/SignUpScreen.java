@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.ohmwards;
-
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Cameron
@@ -38,12 +39,12 @@ public class SignUpScreen extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         returnBtn = new javax.swing.JButton();
         signupBtn = new javax.swing.JButton();
-        passwordField = new javax.swing.JPasswordField();
         usernameField = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        passwordField = new javax.swing.JTextField();
 
         jButton2.setBackground(new java.awt.Color(0, 153, 0));
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -84,6 +85,7 @@ public class SignUpScreen extends javax.swing.JFrame {
         signupBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         signupBtn.setForeground(new java.awt.Color(255, 255, 255));
         signupBtn.setText("Signup");
+        signupBtn.addActionListener(this::signupBtnActionPerformed);
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Username:");
@@ -116,9 +118,8 @@ public class SignUpScreen extends javax.swing.JFrame {
                                 .addGap(3, 3, 3)
                                 .addComponent(jLabel6))
                             .addComponent(jLabel7)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(passwordField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                                .addComponent(usernameField, javax.swing.GroupLayout.Alignment.LEADING)))
+                            .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(126, 126, 126))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,9 +157,7 @@ public class SignUpScreen extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 88, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -177,6 +176,30 @@ public class SignUpScreen extends javax.swing.JFrame {
         menu.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_returnBtnActionPerformed
+
+    private void signupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupBtnActionPerformed
+        if(usernameField.getText().isBlank() || passwordField.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "Please fill out both fields...", "Error", JOptionPane.ERROR_MESSAGE); 
+        }
+        else{
+            // Check for account existence (via username) <-- Searches the accounts 2D ArrayList
+            for(ArrayList<String> account:Ohmwards.accounts){
+                if(account.get(0).equals(usernameField.getText().strip())){
+                    JOptionPane.showMessageDialog(null, "Account already exists, make a new account or login!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Account creation successfull, directing to main menu...", "Success!", JOptionPane.INFORMATION_MESSAGE);  
+            ArrayList<String> newAccount = new ArrayList<>();
+            newAccount.add(usernameField.getText().strip());
+            newAccount.add(passwordField.getText().strip());
+            
+            Ohmwards.accounts.add(newAccount);
+            MainMenu menu = new MainMenu();
+            menu.setVisible(true);
+            this.setVisible(false);
+        }
+    }//GEN-LAST:event_signupBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -216,7 +239,7 @@ public class SignUpScreen extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JPasswordField passwordField;
+    private javax.swing.JTextField passwordField;
     private javax.swing.JButton returnBtn;
     private javax.swing.JButton signupBtn;
     private javax.swing.JTextField usernameField;
