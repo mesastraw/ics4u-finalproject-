@@ -190,11 +190,7 @@ public class SignUpScreen extends javax.swing.JFrame {
                 }
             }
             JOptionPane.showMessageDialog(this, "Account creation successfull, directing to main menu...", "Success!", JOptionPane.INFORMATION_MESSAGE);  
-            ArrayList<String> newAccount = new ArrayList<>();
-            newAccount.add(usernameField.getText().strip());
-            newAccount.add(passwordField.getText().strip());
-            
-            Ohmwards.accounts.add(newAccount);
+            Ohmwards.addAccount(usernameField.getText().strip(), passwordField.getText().strip());
             MainMenu menu = new MainMenu();
             menu.setVisible(true);
             this.setVisible(false);
