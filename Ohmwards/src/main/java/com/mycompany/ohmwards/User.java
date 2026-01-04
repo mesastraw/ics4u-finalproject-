@@ -19,4 +19,8 @@ public class User {
         this.password = password;
         this.projects = projects;
     }
+    
+    public ArrayList<Circuit> getProjects(){
+        return projects;
+    }
 }

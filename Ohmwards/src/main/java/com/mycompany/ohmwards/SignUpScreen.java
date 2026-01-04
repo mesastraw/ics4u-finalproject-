@@ -3,6 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.ohmwards;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 /**
@@ -182,18 +187,28 @@ public class SignUpScreen extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please fill out both fields...", "Error", JOptionPane.ERROR_MESSAGE); 
         }
         else{
-            // Check for account existence (via username) <-- Searches the accounts 2D ArrayList
-            for(ArrayList<String> account:Ohmwards.accounts){
-                if(account.get(0).equals(usernameField.getText().strip())){
-                    JOptionPane.showMessageDialog(null, "Account already exists, make a new account or login!", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+            System.out.println(System.getProperty("user.dir"));
+            String directoryPath = System.getProperty("user.dir"); // Gets project root
+            Path dir = Paths.get(directoryPath);
+
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*.txt")) {
+                for (Path file : stream) {
+                    // Process each .txt file
+                    if(file.getFileName().toString().contains(usernameField.getText().strip())){
+                        JOptionPane.showMessageDialog(null, "Account already exists, make a new account or login!", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                 }
+                
+                JOptionPane.showMessageDialog(this, "Account creation successfull, directing to main menu...", "Success!", JOptionPane.INFORMATION_MESSAGE);  
+                Ohmwards.addAccount(usernameField.getText().strip(), passwordField.getText().strip());
+                MainMenu menu = new MainMenu();
+                menu.setVisible(true);
+                this.setVisible(false);
+                
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            JOptionPane.showMessageDialog(this, "Account creation successfull, directing to main menu...", "Success!", JOptionPane.INFORMATION_MESSAGE);  
-            Ohmwards.addAccount(usernameField.getText().strip(), passwordField.getText().strip());
-            MainMenu menu = new MainMenu();
-            menu.setVisible(true);
-            this.setVisible(false);
         }
     }//GEN-LAST:event_signupBtnActionPerformed
 

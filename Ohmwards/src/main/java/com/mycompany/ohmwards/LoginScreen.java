@@ -5,6 +5,8 @@
 package com.mycompany.ohmwards;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import java.nio.file.*;
+import java.io.*;
 
 /**
  *
@@ -147,20 +149,33 @@ public class LoginScreen extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please fill out both fields...", "Error", JOptionPane.ERROR_MESSAGE); 
         }
         else{
-            // Check for account existence (via username) <-- Searches the accounts 2D ArrayList
-            for(ArrayList<String> account:Ohmwards.accounts){
-                if(account.get(0).equals(usernameField.getText().strip())){
-                    if(account.get(1).equals(passwordField.getText().strip())){
-                        HomePage menu = new HomePage();
-                        menu.setVisible(true);
-                        this.setVisible(false);
-                        return;
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null, "Invalid password, try again...", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
+            System.out.println(System.getProperty("user.dir"));
+            String directoryPath = System.getProperty("user.dir"); // Gets project root
+            Path dir = Paths.get(directoryPath);
+
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*.txt")) {
+                for (Path file : stream) {
+                    // Process each .txt file
+                    if(file.getFileName().toString().contains(usernameField.getText().strip())){
+                        if (Files.readAllLines(file).get(0).equals(passwordField.getText().strip())) {
+                            ArrayList<Circuit> circuit = new ArrayList<>();
+                            // Add circuits to circuit (for later...)
+                            
+                            User newUser = new User(usernameField.getText().strip(), passwordField.getText().strip(), circuit);
+                            Ohmwards.currUser = newUser;
+                            HomePage menu = new HomePage();
+                            menu.setVisible(true);
+                            this.setVisible(false);
+                            return;
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null, "Invalid password, try again...", "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
                     }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             JOptionPane.showMessageDialog(null, "Account does not exist, Try again or create new account!", "Error", JOptionPane.ERROR_MESSAGE); 
         }
