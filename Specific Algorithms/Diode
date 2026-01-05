@@ -1,1 +1,6 @@
+Diode is composed of the abstract Componenet Class
+  boolean electronFlow
+  String direction
 
+void break
+  - This sets the circuit state to closed
