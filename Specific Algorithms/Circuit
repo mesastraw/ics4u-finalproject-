@@ -1,6 +1,6 @@
 abstract Circuit class
 	Initialize attributes
-    -components as a ArrayList<Component>
+    -components as a LinkedList<Component>
     -state as a boolean
 
   public void addComponent(Component item, Vector point1, Vector point2)
