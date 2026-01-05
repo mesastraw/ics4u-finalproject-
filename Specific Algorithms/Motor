@@ -1,1 +1,8 @@
+Motor class is composed of component
+  boolean state
+  booolean electronFlow 
+  double vIN
 
+getSignal() TODO 
+
+void move() TODO
