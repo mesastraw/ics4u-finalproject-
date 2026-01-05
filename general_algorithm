@@ -19,6 +19,8 @@ Give the user the option to create a new circuit, continue an existing circuit o
 - If new project is clicked, user is redirected to the circuit screen as long as the user does not exceed 7 current projects 
 
 User is given an empty circuit diagram (5V Battery and 2 wires in parallel):
+- A grid system will be used to place all blue dots at set positons and to place components in the project
+	- Each blue dot will have its position in the name for easy placement of components
 - Users can place components using the add dropdown (battery, wire, led, resistor) on the plane and attach other components together.
 - Component will be placed after clicking on two blue dots shown on the diagram perpendicular to each other (these will appear after component is selected)
 - Once the circuit hits the requirements (closed, has a power source, etc.. ) a display will pop up with the voltage, current, resistance and power in the circuit. 
