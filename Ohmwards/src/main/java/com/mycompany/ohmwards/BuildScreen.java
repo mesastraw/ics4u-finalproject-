@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.ohmwards;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -11,12 +13,33 @@ package com.mycompany.ohmwards;
 public class BuildScreen extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BuildScreen.class.getName());
+    public JDialog dialog = new JDialog(this, "Component", true);
 
     /**
      * Creates new form BuildScreen
      */
     public BuildScreen() {
         initComponents();
+        
+        // Popup Windows
+        dialog.setLayout(new BorderLayout());
+        JPanel inputPanel = new JPanel(new GridLayout(2, 2));
+        JTextField text1 = new JTextField();
+        JTextField text2 = new JTextField();
+        inputPanel.add(new JLabel("Name:"));
+        inputPanel.add(text1);
+        inputPanel.add(new JLabel("Age:"));
+        inputPanel.add(text2);
+
+        JPanel buttonPanel = new JPanel();
+        JButton saveBtn = new JButton("Save");
+        JButton closeBtn = new JButton("Close");
+        closeBtn.addActionListener(e -> dialog.dispose());
+        buttonPanel.add(saveBtn);
+        buttonPanel.add(closeBtn);
+        
+        dialog.add(inputPanel, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
     }
 
     /**
@@ -39,6 +62,7 @@ public class BuildScreen extends javax.swing.JFrame {
         curntLabel = new javax.swing.JLabel();
         resLabel = new javax.swing.JLabel();
         powLabel = new javax.swing.JLabel();
+        placeBtn = new javax.swing.JButton();
 
         popupMenu1.setLabel("popupMenu1");
 
@@ -80,6 +104,11 @@ public class BuildScreen extends javax.swing.JFrame {
 
         powLabel.setText("Power: ");
 
+        placeBtn.setBackground(new java.awt.Color(255, 0, 0));
+        placeBtn.setForeground(new java.awt.Color(255, 255, 255));
+        placeBtn.setText("Place");
+        placeBtn.addActionListener(this::placeBtnActionPerformed);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -91,7 +120,9 @@ public class BuildScreen extends javax.swing.JFrame {
                 .addComponent(componentChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exitBtn)
-                .addGap(235, 235, 235)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(placeBtn)
+                .addGap(151, 151, 151)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(powLabel)
                     .addComponent(resLabel)
@@ -111,7 +142,9 @@ public class BuildScreen extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(finishBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(componentChoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(exitBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(exitBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(placeBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(voltLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -150,6 +183,12 @@ public class BuildScreen extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_exitBtnActionPerformed
 
+    private void placeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placeBtnActionPerformed
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(placeBtn);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_placeBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -182,6 +221,7 @@ public class BuildScreen extends javax.swing.JFrame {
     private javax.swing.JButton finishBtn;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton placeBtn;
     private java.awt.PopupMenu popupMenu1;
     private java.awt.PopupMenu popupMenu2;
     private javax.swing.JLabel powLabel;
