@@ -170,9 +170,6 @@ public class BuildScreen extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
-        popupMenu1 = new java.awt.PopupMenu();
-        popupMenu2 = new java.awt.PopupMenu();
         jPanel1 = new javax.swing.JPanel();
         finishBtn = new javax.swing.JButton();
         jPanel2 = new GridPanel();
@@ -182,10 +179,6 @@ public class BuildScreen extends javax.swing.JFrame {
         curntLabel = new javax.swing.JLabel();
         resLabel = new javax.swing.JLabel();
         powLabel = new javax.swing.JLabel();
-
-        popupMenu1.setLabel("popupMenu1");
-
-        popupMenu2.setLabel("popupMenu2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 51, 51));
@@ -314,8 +307,6 @@ public class BuildScreen extends javax.swing.JFrame {
     private javax.swing.JButton finishBtn;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private java.awt.PopupMenu popupMenu1;
-    private java.awt.PopupMenu popupMenu2;
     private javax.swing.JLabel powLabel;
     private javax.swing.JLabel resLabel;
     private javax.swing.JLabel voltLabel;
