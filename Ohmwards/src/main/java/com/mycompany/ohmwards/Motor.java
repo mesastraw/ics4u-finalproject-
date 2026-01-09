@@ -10,7 +10,7 @@ import java.util.Vector;
  *
  * @author Cameron
  */
-public class Motor extends Component {
+public abstract class Motor extends Component {
     private boolean state;
     private boolean electronFlow;
     private double vIN;
@@ -49,5 +49,10 @@ public class Motor extends Component {
     public boolean getSignal() {
         // TODO
         return true;
+    }
+    
+    // Possibly show a pop up that the motor is moving
+    public void move() {
+    // TODO
     }
 }
