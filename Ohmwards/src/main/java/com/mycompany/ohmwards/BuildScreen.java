@@ -3,8 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.ohmwards;
-import javax.swing.*;
-import java.awt.*;
 
 /**
  *
@@ -13,33 +11,155 @@ import java.awt.*;
 public class BuildScreen extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BuildScreen.class.getName());
-    public JDialog dialog = new JDialog(this, "Component", true);
 
     /**
      * Creates new form BuildScreen
      */
     public BuildScreen() {
         initComponents();
+        // Ensure jPanel2 is a GridPanel (in case NetBeans regenerated it)
+        if (!(jPanel2 instanceof GridPanel)) {
+            javax.swing.JPanel oldPanel = jPanel2;
+            GridPanel gridPanel = new GridPanel();
+            gridPanel.setPreferredSize(oldPanel.getPreferredSize());
+            gridPanel.setMinimumSize(oldPanel.getMinimumSize());
+            gridPanel.setMaximumSize(oldPanel.getMaximumSize());
+            
+            // Replace in parent container
+            java.awt.Container parent = oldPanel.getParent();
+            if (parent != null) {
+                int index = -1;
+                java.awt.LayoutManager layout = parent.getLayout();
+                if (layout instanceof javax.swing.GroupLayout) {
+                    // For GroupLayout, we need to replace the component
+                    parent.remove(oldPanel);
+                    parent.add(gridPanel);
+                } else {
+                    // For other layouts, find the index and replace
+                    for (int i = 0; i < parent.getComponentCount(); i++) {
+                        if (parent.getComponent(i) == oldPanel) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index >= 0) {
+                        parent.remove(index);
+                        parent.add(gridPanel, index);
+                    }
+                }
+                jPanel2 = gridPanel;
+                parent.revalidate();
+                parent.repaint();
+            } else {
+                jPanel2 = gridPanel;
+            }
+        }
         
-        // Popup Windows
-        dialog.setLayout(new BorderLayout());
-        JPanel inputPanel = new JPanel(new GridLayout(2, 2));
-        JTextField text1 = new JTextField();
-        JTextField text2 = new JTextField();
-        inputPanel.add(new JLabel("Name:"));
-        inputPanel.add(text1);
-        inputPanel.add(new JLabel("Age:"));
-        inputPanel.add(text2);
-
-        JPanel buttonPanel = new JPanel();
-        JButton saveBtn = new JButton("Save");
-        JButton closeBtn = new JButton("Close");
-        closeBtn.addActionListener(e -> dialog.dispose());
-        buttonPanel.add(saveBtn);
-        buttonPanel.add(closeBtn);
+        // mouse listener for grid intersection events
+        if (jPanel2 instanceof GridPanel) {
+            GridPanel gridPanel = (GridPanel) jPanel2;
+            gridPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    java.awt.Point intersection = gridPanel.getIntersectionAt(e.getX(), e.getY());
+                    if (intersection != null) {
+                        java.awt.Point gridCoords = gridPanel.getGridCoordinates(intersection);
+                        // TODO: Implement your event handling here
+                        // Example: onIntersectionClicked(intersection, gridCoords);
+                        System.out.println("Intersection clicked at screen: (" + intersection.x + ", " + intersection.y + 
+                                         "), grid: (" + gridCoords.x + ", " + gridCoords.y + ")");
+                    }
+                }
+            });
+        }
+    }
+    
+    /**
+     * Custom JPanel that displays a visual grid with dots at intersections
+     */
+    private static class GridPanel extends javax.swing.JPanel {
+        private static final double GRID_SIZE = 70;
+        private static final int DOT_SIZE = 8; // Size of dots at intersections
+        private static final int CLICK_TOLERANCE = 10; // Pixel tolerance for clicking on intersections
         
-        dialog.add(inputPanel, BorderLayout.CENTER);
-        dialog.add(buttonPanel, BorderLayout.SOUTH);
+        public GridPanel() {
+            setBackground(new java.awt.Color(255, 255, 255));
+            setOpaque(true);
+            // Enable mouse events for intersection clicks
+            setFocusable(true);
+        }
+        
+        public java.awt.Point getIntersectionAt(int screenX, int screenY) {
+            // Find nearest grid intersection
+            int gridX = (int) (Math.round(screenX / GRID_SIZE) * GRID_SIZE);
+            int gridY = (int) (Math.round(screenY / GRID_SIZE) * GRID_SIZE);
+            
+            // Check click within tolerance of an intersection
+            double distance = Math.sqrt(Math.pow(screenX - gridX, 2) + Math.pow(screenY - gridY, 2));
+            if (distance <= CLICK_TOLERANCE) {
+                return new java.awt.Point(gridX, gridY);
+            }
+            return null;
+        }
+        
+        
+        public java.awt.Point getGridCoordinates(java.awt.Point intersection) {
+            if (intersection == null) return null;
+            int col = (int) (intersection.x / GRID_SIZE);
+            int row = (int) (intersection.y / GRID_SIZE);
+            return new java.awt.Point(col, row);
+        }
+        
+        @Override
+        protected void paintComponent(java.awt.Graphics g) {
+            super.paintComponent(g);
+            int width = getWidth();
+            int height = getHeight();
+            
+            if (width <= 0 || height <= 0) {
+                return;
+            }
+            
+            java.awt.Graphics2D g2d = (java.awt.Graphics2D) g.create();
+            try {
+                // anti-aliasing for smoother lines
+                g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
+                                    java.awt.RenderingHints.VALUE_ANTIALIAS_OFF);
+                g2d.setRenderingHint(java.awt.RenderingHints.KEY_STROKE_CONTROL,
+                                    java.awt.RenderingHints.VALUE_STROKE_PURE);
+                
+                // Draw grid lines
+                g2d.setColor(new java.awt.Color(150, 150, 150));
+                g2d.setStroke(new java.awt.BasicStroke(1.0f));
+                
+                // Draw vertical lines
+                for (double x = 0; x <= width; x += GRID_SIZE) {
+                    int lineX = (int) x;
+                    g2d.drawLine(lineX, 0, lineX, height);
+                }
+                
+                // Draw horizontal lines 
+                for (double y = 0; y <= height; y += GRID_SIZE) {
+                    int lineY = (int) y;
+                    g2d.drawLine(0, lineY, width, lineY);
+                }
+                
+                // Draw dots at each intersection
+                g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
+                                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setColor(new java.awt.Color(0, 100, 255)); // Blue color
+                
+                for (double x = 0; x <= width; x += GRID_SIZE) {
+                    for (double y = 0; y <= height; y += GRID_SIZE) {
+                        int dotX = (int) x - DOT_SIZE / 2;
+                        int dotY = (int) y - DOT_SIZE / 2;
+                        g2d.fillOval(dotX, dotY, DOT_SIZE, DOT_SIZE);
+                    }
+                }
+            } finally {
+                g2d.dispose();
+            }
+        }
     }
 
     /**
@@ -51,10 +171,8 @@ public class BuildScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        popupMenu1 = new java.awt.PopupMenu();
-        popupMenu2 = new java.awt.PopupMenu();
         jPanel1 = new javax.swing.JPanel();
-        finishBtn = new javax.swing.JButton();
+        placeBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         componentChoice = new java.awt.Choice();
         exitBtn = new javax.swing.JButton();
@@ -62,19 +180,15 @@ public class BuildScreen extends javax.swing.JFrame {
         curntLabel = new javax.swing.JLabel();
         resLabel = new javax.swing.JLabel();
         powLabel = new javax.swing.JLabel();
-        placeBtn = new javax.swing.JButton();
         projectTitle = new javax.swing.JTextField();
-
-        popupMenu1.setLabel("popupMenu1");
-
-        popupMenu2.setLabel("popupMenu2");
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 51, 51));
 
-        finishBtn.setBackground(new java.awt.Color(255, 0, 0));
-        finishBtn.setForeground(new java.awt.Color(255, 255, 255));
-        finishBtn.setText("Finish");
+        placeBtn.setBackground(new java.awt.Color(255, 0, 0));
+        placeBtn.setForeground(new java.awt.Color(255, 255, 255));
+        placeBtn.setText("Place");
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -105,39 +219,41 @@ public class BuildScreen extends javax.swing.JFrame {
 
         powLabel.setText("Power: ");
 
-        placeBtn.setBackground(new java.awt.Color(255, 0, 0));
-        placeBtn.setForeground(new java.awt.Color(255, 255, 255));
-        placeBtn.setText("Place");
-        placeBtn.addActionListener(this::placeBtnActionPerformed);
+        projectTitle.setText("Unknown #1");
 
-        projectTitle.setText("Unamed 1");
+        jLabel1.setText("Project Title:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(finishBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(componentChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(exitBtn))
-                    .addComponent(projectTitle))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(placeBtn)
-                .addGap(151, 151, 151)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(powLabel)
-                    .addComponent(resLabel)
-                    .addComponent(curntLabel)
-                    .addComponent(voltLabel))
-                .addContainerGap(266, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(placeBtn)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(componentChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(exitBtn))
+                                    .addComponent(projectTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(149, 149, 149)
+                                .addComponent(jLabel1)))
+                        .addGap(151, 151, 151)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(powLabel)
+                            .addComponent(resLabel)
+                            .addComponent(curntLabel)
+                            .addComponent(voltLabel))
+                        .addGap(0, 260, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -146,14 +262,14 @@ public class BuildScreen extends javax.swing.JFrame {
                 .addContainerGap(20, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(projectTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(finishBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(componentChoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(exitBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(placeBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(placeBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(exitBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(componentChoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(voltLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -192,12 +308,6 @@ public class BuildScreen extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_exitBtnActionPerformed
 
-    private void placeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placeBtnActionPerformed
-        dialog.setSize(300, 150);
-        dialog.setLocationRelativeTo(placeBtn);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_placeBtnActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -227,12 +337,10 @@ public class BuildScreen extends javax.swing.JFrame {
     private java.awt.Choice componentChoice;
     private javax.swing.JLabel curntLabel;
     private javax.swing.JButton exitBtn;
-    private javax.swing.JButton finishBtn;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton placeBtn;
-    private java.awt.PopupMenu popupMenu1;
-    private java.awt.PopupMenu popupMenu2;
     private javax.swing.JLabel powLabel;
     private javax.swing.JTextField projectTitle;
     private javax.swing.JLabel resLabel;

@@ -14,8 +14,8 @@ public class Diode extends Component {
     private boolean electronFlow;
     private Direction direction;
     
-    public Diode(boolean electronFlow, Direction diodeDirection, ConnectionType type, Vector<Double> position, double voltage, double current, double resistance, double power, String name, String direction) {
-        super(type, position, voltage, current, resistance, power, name, direction); // Change this to direction enum
+    public Diode(boolean electronFlow, Direction diodeDirection, ConnectionType type, Vector<Double> position, double voltage, double current, double resistance, double power, String name) {
+        super(type, position, voltage, current, resistance, power, name, diodeDirection);
         this.electronFlow = electronFlow;
         this.direction = diodeDirection;
     }
