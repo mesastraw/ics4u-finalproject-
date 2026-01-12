@@ -4,7 +4,8 @@
  */
 package com.mycompany.ohmwards;
 import java.util.Vector;
-import java.awt.*;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Cameron
@@ -276,8 +277,25 @@ public class BuildScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_exitBtnActionPerformed
 
     private void placeBtnActionPerformed(java.awt.event.ActionEvent evt){
-        System.out.println(pos1);
-        System.out.println(pos2);
+        // Validation Checks
+        if(pos1.isEmpty() || pos2.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Both positions need to be selected!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            if((!pos1.get(0).equals(pos2.get(0))) && (!pos1.get(1).equals(pos2.get(1)))){
+                JOptionPane.showMessageDialog(null, "Cannot place components diagonally!", "Error", JOptionPane.ERROR_MESSAGE);
+                pos1.clear();
+                pos2.clear();
+            }
+            else if(pos1.equals(pos2)){
+                JOptionPane.showMessageDialog(null, "Both positions need to be different!", "Error", JOptionPane.ERROR_MESSAGE);
+                pos1.clear();
+                pos2.clear();
+            }
+            else{
+                System.out.println("Works!");
+            }
+        }
     }
 
     private void choiceItemStateChanged(java.awt.event.ItemEvent evt){
