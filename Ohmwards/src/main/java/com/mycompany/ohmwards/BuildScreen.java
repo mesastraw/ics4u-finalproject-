@@ -23,6 +23,7 @@ public class BuildScreen extends javax.swing.JFrame {
     
     private Vector<Integer> pos1 = new Vector<Integer>();
     private Vector<Integer> pos2 = new Vector<Integer>();
+    private java.util.List<java.awt.Point> componentIntersections = new java.util.ArrayList<>();
     
     // Popup Window
     private final JDialog dialog = new JDialog(this, "Component", true);
@@ -51,6 +52,7 @@ public class BuildScreen extends javax.swing.JFrame {
         
         if (jPanel2 instanceof GridPanel) {
             GridPanel gridPanel = (GridPanel) jPanel2;
+            gridPanel.setComponentIntersections(componentIntersections);
             gridPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -77,10 +79,15 @@ public class BuildScreen extends javax.swing.JFrame {
     /**
      * Custom JPanel that displays a visual grid with dots at intersections
      */
-    private static class GridPanel extends javax.swing.JPanel {
+    private class GridPanel extends javax.swing.JPanel {
         private static final double GRID_SIZE = 70;
         private static final int DOT_SIZE = 8; 
-        private static final int CLICK_TOLERANCE = 10; 
+        private static final int CLICK_TOLERANCE = 10;
+        private java.util.List<java.awt.Point> componentIntersections;
+        
+        public void setComponentIntersections(java.util.List<java.awt.Point> intersections) {
+            this.componentIntersections = intersections;
+        } 
         
         public GridPanel() {
             setBackground(new java.awt.Color(255, 255, 255));
@@ -147,13 +154,30 @@ public class BuildScreen extends javax.swing.JFrame {
                 // Draw dots at each intersection
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
                                     java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                g2d.setColor(new java.awt.Color(0, 100, 255)); // Blue color
+                g2d.setColor(new java.awt.Color(0, 100, 255));
                 
                 for (double x = 0; x <= width; x += GRID_SIZE) {
                     for (double y = 0; y <= height; y += GRID_SIZE) {
-                        int dotX = (int) x - DOT_SIZE / 2;
-                        int dotY = (int) y - DOT_SIZE / 2;
-                        g2d.fillOval(dotX, dotY, DOT_SIZE, DOT_SIZE);
+                        boolean shouldDraw = false;
+                        
+                        if (componentIntersections == null || componentIntersections.isEmpty()) {
+                            shouldDraw = true;
+                        } else {
+                            for (java.awt.Point intersection : componentIntersections) {
+                                double dx = Math.abs(x - intersection.x);
+                                double dy = Math.abs(y - intersection.y);
+                                if ((dx == GRID_SIZE && dy == 0) || (dx == 0 && dy == GRID_SIZE)) {
+                                    shouldDraw = true;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        if (shouldDraw) {
+                            int dotX = (int) x - DOT_SIZE / 2;
+                            int dotY = (int) y - DOT_SIZE / 2;
+                            g2d.fillOval(dotX, dotY, DOT_SIZE, DOT_SIZE);
+                        }
                     }
                 }
             } finally {
@@ -320,6 +344,9 @@ public class BuildScreen extends javax.swing.JFrame {
                 double minX = (pos1.get(0) + pos2.get(0)) / 2.0;
                 double minY = (pos1.get(1) + pos2.get(1)) / 2.0;
                 
+                componentIntersections.add(new java.awt.Point(pos1.get(0), pos1.get(1)));
+                componentIntersections.add(new java.awt.Point(pos2.get(0), pos2.get(1)));
+                
                 jPanel2.setLayout(null);
                 JButton component = new JButton("Component");
                 jPanel2.add(component);
@@ -342,6 +369,8 @@ public class BuildScreen extends javax.swing.JFrame {
                         dialog.setVisible(true);
                     }
                 });
+                
+                jPanel2.repaint();
             }
         }
         pos1.clear();
