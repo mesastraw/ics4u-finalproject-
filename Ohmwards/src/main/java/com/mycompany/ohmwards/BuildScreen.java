@@ -5,7 +5,13 @@
 package com.mycompany.ohmwards;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JFrame;
+import java.awt.FlowLayout;
 
 /**
  *
@@ -17,12 +23,30 @@ public class BuildScreen extends javax.swing.JFrame {
     
     private Vector<Integer> pos1 = new Vector<Integer>();
     private Vector<Integer> pos2 = new Vector<Integer>();
+    
+    // Popup Window
+    private JDialog dialog = new JDialog(this, "Component", true);
 
     /**
      * Creates new form BuildScreen
      */
     public BuildScreen() {
         initComponents();
+        dialog.setLayout(new FlowLayout());
+        JTextField field1 = new JTextField(10);
+        JTextField field2 = new JTextField(10);
+        JButton closeBtn = new JButton("Close");
+        closeBtn.addActionListener(e -> dialog.dispose());
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Colour:")); panel.add(field1);
+        panel.add(new JLabel("Resistance:")); panel.add(field2);
+        panel.add(closeBtn);
+
+        dialog.add(panel);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.pack();
+        
         if (jPanel2 instanceof GridPanel) {
             GridPanel gridPanel = (GridPanel) jPanel2;
             gridPanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -304,7 +328,8 @@ public class BuildScreen extends javax.swing.JFrame {
                 component.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent e) {
                         // Code to run when button is clicked
-                        System.out.println("Button clicked!");
+                        dialog.setLocationRelativeTo(component);
+                        dialog.setVisible(true);
                     }
                 });
             }
