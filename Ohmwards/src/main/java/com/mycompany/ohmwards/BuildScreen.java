@@ -5,6 +5,7 @@
 package com.mycompany.ohmwards;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.JButton;
 
 /**
  *
@@ -294,6 +295,16 @@ public class BuildScreen extends javax.swing.JFrame {
             }
             else{
                 System.out.println("Works!");
+                
+                // Place a btn at the midPoint
+                double minX = (pos1.get(0) + pos2.get(0)) / 2.0;
+                double minY = (pos1.get(1) + pos2.get(1)) / 2.0;
+                
+                JButton component = new JButton("Component");
+                this.setLayout(null);
+                this.add(component);
+                component.setBounds((int) minX, (int) minY, 100, 30);
+                component.setVisible(true);
             }
         }
     }
