@@ -12,18 +12,19 @@ import javax.swing.JButton;
  */
 public class Stepper extends Motor {
     
-    private int degree;
+    private double step;
     
-    public Stepper(boolean state, boolean electronFlow, double vIN, ConnectionType type, Vector<Double> position, JButton btn, double voltage, double current, double resistance, double power, String name, Direction direction) {
-        super(state, electronFlow, vIN, type, position, btn, voltage, current, resistance, power, name, direction);
+    public Stepper(Vector<Double> position, JButton btn) {
+        super(position, btn);
+        this.step = 1.2;
     }
     
-    public int getDegree() {
-        return this.degree;
+    public double getStep() {
+        return this.step;
     }
  
-    public void setDegree(int newDegree) {
-        this.degree = newDegree;
+    public void setStep(double newDegree) {
+        this.step = newDegree;
     }
     
     // TODO figure out how to calcuate the degree

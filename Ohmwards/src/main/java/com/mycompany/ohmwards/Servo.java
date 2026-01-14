@@ -14,9 +14,9 @@ public class Servo extends Motor {
     
     private int degree;
     
-    public Servo(int degree, boolean state, boolean electronFlow, double vIN, ConnectionType type, Vector<Double> position, JButton btn, double voltage, double current, double resistance, double power, String name, Direction direction) {
-        super(state, electronFlow, vIN, type, position, btn, voltage, current, resistance, power, name, direction);
-        this.degree = degree;
+    public Servo(Vector<Double> position, JButton btn) {
+        super(position, btn);
+        this.degree = 180;
     }
     
     public int getDegree() {

@@ -12,8 +12,8 @@ import javax.swing.JButton;
  */
 public class Battery extends PowerSource {
     
-    public Battery(double voltageOut, ConnectionType type, Vector<Double> position, JButton btn, double voltage, double current, double resistance, double power, String name, Direction direction) {
-        super(voltageOut, type, position, btn, voltage, current, resistance, power, name, direction);
+    public Battery(Vector<Double> position, JButton btn) {
+        super(5, ConnectionType.POWERSOURCE, position, btn);
     }
     
     public void surge() {
