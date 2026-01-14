@@ -32,6 +32,22 @@ public class BuildScreen extends javax.swing.JFrame {
     public BuildScreen() {
         initComponents();
         
+        // Component choices for application...
+        componentChoice.add("Battery");
+        componentChoice.add("Carbon Resistor");
+        componentChoice.add("Resistor");
+        componentChoice.add("DC Motor");
+        componentChoice.add("Servo Motor");
+        componentChoice.add("Stepper Motor");
+        componentChoice.add("Diode");
+        componentChoice.add("LED");
+        componentChoice.add("Wire");
+        componentChoice.add("Voltage Regulator");
+        componentChoice.add("Transistor");
+        componentChoice.add("Relay");
+        componentChoice.add("Switch");
+        componentChoice.add("Power Supply");
+        
         if (jPanel2 instanceof GridPanel) {
             GridPanel gridPanel = (GridPanel) jPanel2;
             gridPanel.setComponentIntersections(componentIntersections);
@@ -358,8 +374,55 @@ public class BuildScreen extends javax.swing.JFrame {
                 component.setBounds((int) minX - 35, (int) minY - 15, 70, 30);
                 jPanel2.setVisible(true); 
                 component.setVisible(true);
-                
                 componentMap.put(component, new java.awt.Point[]{p1, p2});
+                
+                switch(componentChoice.getSelectedItem()){
+                    case "Battery":
+                        component.setText("Battery");
+                        break;
+                    case "Carbon Resistor":
+                        component.setText("Carbon Resistor");
+                        break;
+                    case "Resistor":
+                        component.setText("Resistor");
+                        break;
+                    case "DC Motor":
+                        component.setText("DC Motor");
+                        break;
+                    case "Servo Motor":
+                        component.setText("Servo");
+                        break;
+                    case "Stepper Motor":
+                        component.setText("Stepper");
+                        break;
+                    case "Diode":
+                        component.setText("Diode");
+                        break;
+                    case "LED":
+                        component.setText("LED");
+                        break;
+                    case "Wire":
+                        component.setText("Wire");
+                        break;
+                    case "Voltage Regulator":
+                        component.setText("Volt Reg");
+                        break;
+                    case "Transistor":
+                        component.setText("Transistor");
+                        break;
+                    case "Relay":
+                        component.setText("Relay");
+                        break;
+                    case "Switch":
+                        component.setText("Switch");
+                        break;
+                    case "Power Supply":
+                        component.setText("Power Supply");
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(null, "There was an error with the system!", "Error", JOptionPane.ERROR_MESSAGE);
+                        break;
+                }
                 
                 component.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent e) {
