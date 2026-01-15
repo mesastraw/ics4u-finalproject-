@@ -23,6 +23,8 @@ public abstract class Component {
         this.type = type;
         this.position = position;
         compBtn = btn;
+        
+        Ohmwards.circ.addComponent(this);
     }
     
     // Getters + Setters

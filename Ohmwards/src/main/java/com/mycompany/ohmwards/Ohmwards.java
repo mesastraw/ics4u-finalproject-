@@ -15,12 +15,14 @@ import java.util.logging.Logger;
 public class Ohmwards {
     public static MainMenu main;
     public static User currUser;
+    public static Circuit circ;
     
     public static void main(String[] args) {  
         addAccount("totallyRoland", "vergyIsStronger");
         addAccount("bongbong", "#bestEmployee");
         addAccount("heathcliff", "catherine");
         
+        circ = new Circuit();
         main = new MainMenu();
         main.setVisible(true);
     }

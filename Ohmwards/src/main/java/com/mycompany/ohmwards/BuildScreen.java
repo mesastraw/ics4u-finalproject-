@@ -362,8 +362,12 @@ public class BuildScreen extends javax.swing.JFrame {
                     return;
                 }
                 
-                double minX = (pos1.get(0) + pos2.get(0)) / 2.0;
-                double minY = (pos1.get(1) + pos2.get(1)) / 2.0;
+                double midX = (pos1.get(0) + pos2.get(0)) / 2.0;
+                double midY = (pos1.get(1) + pos2.get(1)) / 2.0;
+                
+                Vector<Double> midPos = new Vector<>();
+                midPos.add(midX);
+                midPos.add(midY);
                 
                 componentIntersections.add(p1);
                 componentIntersections.add(p2);
@@ -371,53 +375,67 @@ public class BuildScreen extends javax.swing.JFrame {
                 jPanel2.setLayout(null);
                 JButton component = new JButton("Component");
                 jPanel2.add(component);
-                component.setBounds((int) minX - 35, (int) minY - 15, 70, 30);
+                component.setBounds((int) midX - 35, (int) midY - 15, 70, 30);
                 jPanel2.setVisible(true); 
                 component.setVisible(true);
                 componentMap.put(component, new java.awt.Point[]{p1, p2});
                 
                 switch(componentChoice.getSelectedItem()){
                     case "Battery":
-                        component.setText("Battery");
+                        component.setText("Battery");        
+                        Battery bat = new Battery(midPos, component);
                         break;
                     case "Carbon Resistor":
                         component.setText("Carbon Resistor");
+                        CarbonResistor cRes = new CarbonResistor(midPos, component);
                         break;
                     case "Resistor":
                         component.setText("Resistor");
+                        Resistor resistor = new Resistor(midPos, component);
                         break;
                     case "DC Motor":
                         component.setText("DC Motor");
+                        DCMotor dcMot = new DCMotor(midPos, component);
                         break;
                     case "Servo Motor":
                         component.setText("Servo");
+                        Servo servo = new Servo(midPos, component);
                         break;
                     case "Stepper Motor":
                         component.setText("Stepper");
+                        Stepper stepper = new Stepper(midPos, component);
                         break;
                     case "Diode":
                         component.setText("Diode");
+                        Diode diode = new Diode(midPos, component);
                         break;
                     case "LED":
                         component.setText("LED");
+                        LED led = new LED(midPos, component);
                         break;
                     case "Wire":
                         component.setText("Wire");
+                        Wire wire = new Wire(midPos, component);
                         break;
                     case "Voltage Regulator":
                         component.setText("Volt Reg");
+                        VoltageRegulator voltReg = new VoltageRegulator(midPos, component);
                         break;
                     case "Transistor":
                         component.setText("Transistor");
+                        Transistor transistor = new Transistor(midPos, component);
                         break;
                     case "Relay":
                         component.setText("Relay");
+                        Relay relay = new Relay(midPos, component);
                         break;
                     case "Switch":
                         component.setText("Switch");
+                        Switch sensor = new Switch(midPos, component);
                         break;
                     case "Power Supply":
                         component.setText("Power Supply");
+                        PowerSupply powerSupp = new PowerSupply(midPos, component);
                         break;
                     default:
                         JOptionPane.showMessageDialog(null, "There was an error with the system!", "Error", JOptionPane.ERROR_MESSAGE);

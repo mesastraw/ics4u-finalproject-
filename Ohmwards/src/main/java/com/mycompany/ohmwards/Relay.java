@@ -14,7 +14,7 @@ import javax.swing.JButton;
 public class Relay extends PowerSupply {
     private int voltsRequired;
     
-    public Relay(double voltageOut, ConnectionType type, Vector<Double> position, JButton btn) {
+    public Relay(Vector<Double> position, JButton btn) {
         super(position, btn);
         this.voltsRequired = 5;
     }
