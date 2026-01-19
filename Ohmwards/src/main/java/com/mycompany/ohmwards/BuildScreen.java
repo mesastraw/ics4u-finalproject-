@@ -26,7 +26,9 @@ public class BuildScreen extends javax.swing.JFrame {
     private java.util.List<java.awt.Point> componentIntersections = new java.util.ArrayList<>();
     private java.util.Map<JButton, java.awt.Point[]> componentMap = new java.util.HashMap<>();
     
-    public Component comp;
+    private Component comp;
+    private String fieldTxt1;
+    private String fieldTxt2;
     
     /**
      * Creates new form BuildScreen
@@ -35,13 +37,10 @@ public class BuildScreen extends javax.swing.JFrame {
         initComponents();
         
         // Component choices for application...
-        componentChoice.add("Battery");
-        componentChoice.add("Carbon Resistor");
         componentChoice.add("Resistor");
         componentChoice.add("DC Motor");
         componentChoice.add("Servo Motor");
         componentChoice.add("Stepper Motor");
-        componentChoice.add("Diode");
         componentChoice.add("LED");
         componentChoice.add("Wire");
         componentChoice.add("Voltage Regulator");
@@ -385,47 +384,79 @@ public class BuildScreen extends javax.swing.JFrame {
                 switch(componentChoice.getSelectedItem()){
                     case "Resistor":
                         component.setText("Resistor");
-                        comp = new Resistor(midPos, component);
+                        Resistor res = new Resistor(midPos, component);
+                        fieldTxt1 = Integer.toString(res.getResistance());
+                        fieldTxt2 = res.getType();
+                        comp = res;
                         break;
                     case "DC Motor":
                         component.setText("DC Motor");
-                        comp = new DCMotor(midPos, component);
+                        DCMotor mot = new DCMotor(midPos, component);
+                        fieldTxt1 = Integer.toString(mot.getTorque());
+                        fieldTxt2 = Integer.toString(mot.getRPM());
+                        comp = mot;
                         break;
                     case "Servo Motor":
                         component.setText("Servo");
-                        comp = new Servo(midPos, component);
+                        Servo servoMot = new Servo(midPos, component);
+                        fieldTxt1 = Integer.toString(servoMot.getTorque());
+                        fieldTxt2 = Integer.toString(servoMot.getDegree());
+                        comp = servoMot;
                         break;
                     case "Stepper Motor":
                         component.setText("Stepper");
-                        comp = new Stepper(midPos, component);
+                        Stepper stepMot = new Stepper(midPos, component);
+                        fieldTxt1 = Integer.toString(stepMot.getTorque());
+                        fieldTxt2 = Double.toString(stepMot.getStep());
+                        comp = stepMot;
                         break;
                     case "LED":
                         component.setText("LED");
-                        comp = new LED(midPos, component);
+                        LED led = new LED(midPos, component);
+                        fieldTxt1 = led.getDirection();
+                        fieldTxt2 = led.getColour();
+                        comp = led;
                         break;
                     case "Wire":
                         component.setText("Wire");
-                        comp = new Wire(midPos, component);
+                        Wire wire = new Wire(midPos, component);
+                        fieldTxt1 = wire.getColour();
+                        fieldTxt2 = Integer.toString(wire.getGauge());
+                        comp = wire;
                         break;
                     case "Voltage Regulator":
                         component.setText("Volt Reg");
-                        comp = new VoltageRegulator(midPos, component);
+                        VoltageRegulator vt = new VoltageRegulator(midPos, component);
+                        fieldTxt1 = Double.toString(vt.getVoltageOut());
+                        fieldTxt2 = Double.toString(vt.getMaxVoltage());
+                        comp = vt;
                         break;
                     case "Transistor":
                         component.setText("Transistor");
-                        comp = new Transistor(midPos, component);
+                        Transistor transistor = new Transistor(midPos, component);
+                        fieldTxt1 = Double.toString(transistor.getVoltageRequired());
+                        fieldTxt2 = Double.toString(transistor.getVoltageOut());
+                        comp = transistor;
                         break;
                     case "Relay":
                         component.setText("Relay");
-                        comp = new Relay(midPos, component);
+                        Relay relay = new Relay(midPos, component);
+                        fieldTxt1 = Double.toString(relay.getVoltageOut());
+                        fieldTxt2 = Double.toString(relay.getVoltsRequired());
+                        comp = relay;
                         break;
                     case "Switch":
                         component.setText("Switch");
-                        comp = new Switch(midPos, component);
+                        Switch switchComp = new Switch(midPos, component);
+                        fieldTxt1 = switchComp.getDirection();
+                        fieldTxt2 = switchComp.getState();
                         break;
                     case "Power Supply":
                         component.setText("Power Supply");
-                        comp = new PowerSupply(midPos, component);
+                        PowerSupply powerSupp = new PowerSupply(midPos, component);
+                        fieldTxt1 = Double.toString(powerSupp.getVoltageOut());
+                        fieldTxt2 = powerSupp.getBrand();
+                        comp = powerSupp;
                         break;
                     default:
                         JOptionPane.showMessageDialog(null, "There was an error with the system!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -437,7 +468,9 @@ public class BuildScreen extends javax.swing.JFrame {
                         JDialog componentDialog = new JDialog(BuildScreen.this, "Component", true);
                         componentDialog.setLayout(new FlowLayout());
                         JTextField field1 = new JTextField(10);
+                        field1.setText(fieldTxt1);
                         JTextField field2 = new JTextField(10);
+                        field2.setText(fieldTxt2);
                         JButton deleteBtn = new JButton("Trash");
                         deleteBtn.setBackground(Color.RED);
                         deleteBtn.setForeground(Color.WHITE);
