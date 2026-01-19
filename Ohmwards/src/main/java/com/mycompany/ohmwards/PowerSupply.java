@@ -20,11 +20,10 @@ public class PowerSupply extends PowerSource {
         brand = "Microsoft";
     }
     
-    public void surge() {
-    // TODO!
+    public String getBrand(){
+        return brand;
     }
-    
-    public void changeOut() {
-    // TODO!
+    public void setBrand(String newBrand){
+        brand = newBrand;
     }
 }

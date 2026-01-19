@@ -38,9 +38,4 @@ public abstract class Component {
     // Getters + Setters
      
     // Calculate values
-    
-    public void displayPopup(){
-        // Display the info and stuff in a popup menu on click
-        
-    }
 }

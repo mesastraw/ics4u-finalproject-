@@ -26,8 +26,14 @@ public class Resistor extends Component {
     public void setResistance(int newResistance) {
         this.resistance = newResistance;
     }
-    
     public int getResistance() {
         return this.resistance;
+    }
+    
+    public String getType(){
+        return type;
+    }
+    public void setType(String newType){
+        type = newType;
     }
 }

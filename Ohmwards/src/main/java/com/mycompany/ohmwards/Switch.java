@@ -17,29 +17,23 @@ public class Switch extends Component {
     private String direction;
     private String state;
     
-    private boolean electronFlow;
-    private boolean isClosed;
-    
     public Switch(Vector<Double> position, JButton btn) {
         super(ConnectionType.SWITCH, position, btn, new JLabel("Direction:"), new JLabel("State:"));
         direction = "Up";
         state = "false";
-        this.electronFlow = false;
-        this.isClosed = false;
     }
     
-    public void setElectronFlow(boolean newElectronFlow) {
-        this.electronFlow = newElectronFlow;
+    public String getDirection(){
+        return direction;
+    }
+    public void setDirection(String dir){
+        direction = dir;
     }
     
-    public void setIsClosed(boolean newIsClosed) {
-        this.isClosed = newIsClosed;
+    public String getState(){
+        return state;
     }
-    public boolean getElectronFlow() {
-        return this.electronFlow;
-    }
-    
-    public boolean getIsClosed() {
-        return this.isClosed;
+    public void setState(String newState){
+        state = newState;
     }
 }

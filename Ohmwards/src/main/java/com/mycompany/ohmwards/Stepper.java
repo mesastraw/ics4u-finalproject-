@@ -28,10 +28,4 @@ public class Stepper extends Motor {
     public void setStep(double newDegree) {
         this.step = newDegree;
     }
-    
-    // TODO figure out how to calcuate the degree
-    // Or what this function will do
-    public void calcSteps() {
-        // TODO
-    }
 }

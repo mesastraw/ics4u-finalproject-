@@ -27,8 +27,4 @@ public abstract class PowerSource extends Component{
     public double getVoltageOut() {
         return this.voltageOut;
     }
-    
-    public void turnOn() {
-        // TODO!
-    }
 }

@@ -37,11 +37,4 @@ public class Wire extends Component {
     public void setGauge(int newGauge) {
        gauge = newGauge;
     }
-    
-    // Checks and compares the powerlimit and current
-    // If the current is too high a burnout will happen
-    // The user will be told the burnout
-    public void burnout() {
-        // TODO!
-    }
 }

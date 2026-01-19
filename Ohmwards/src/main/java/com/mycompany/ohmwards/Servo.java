@@ -28,9 +28,4 @@ public class Servo extends Motor {
     public void setDegree(int newDegree) {
         this.degree = newDegree;
     }
-    
-    // Figure out what this will do
-    public void position() {
-        // TODO
-    }
 }

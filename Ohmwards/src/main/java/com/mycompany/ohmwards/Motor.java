@@ -14,48 +14,16 @@ import javax.swing.JLabel;
  */
 public abstract class Motor extends Component {
     private int torque;
-    private boolean state;
-    private boolean electronFlow;
-    private double vIN;
 
     public Motor(Vector<Double> position, JButton btn, JLabel lab1, JLabel lab2) {
         super(ConnectionType.MODULE, position, btn, lab1, lab2);
-        this.state = false;
-        this.electronFlow = false;
-        this.vIN = 5.0;
+        torque = 120;
     }
     
-    public boolean getState() {
-        return state;
+    public int getTorque(){
+        return torque;
     }
-    
-    public boolean getElectronFlow() {
-        return electronFlow;
-    }
-    
-    public double vIN() {
-        return vIN;
-    }
-    
-    public void setElectronFlow(boolean newFlow) {
-        this.electronFlow = newFlow;
-    }
-    
-    public void setState(boolean newState) {
-        this.state = newState;
-    }
-    
-    public void setVIN(double newVIN) {
-        this.vIN = newVIN;
-    }
-    
-    public boolean getSignal() {
-        // TODO
-        return true;
-    }
-    
-    // Possibly show a pop up that the motor is moving
-    public void move() {
-    // TODO
+    public void setTorque(int newTorque){
+        torque = newTorque;
     }
 }

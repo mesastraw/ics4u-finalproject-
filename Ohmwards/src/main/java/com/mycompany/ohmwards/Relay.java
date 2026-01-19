@@ -20,11 +20,10 @@ public class Relay extends PowerSource {
         this.voltsRequired = 12;
     }
     
-    public void surge() {
-    // TODO!
+    public int getVoltsRequired() {
+        return voltsRequired;
     }
-    
-    public void convert() {
-    // TODO!
+    public void setVoltsRequired(int newRequired){
+        voltsRequired = newRequired;
     }
 }
