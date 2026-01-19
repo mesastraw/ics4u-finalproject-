@@ -45,6 +45,23 @@ public class BuildScreen extends javax.swing.JFrame {
     private Component comp;
     private String fieldTxt1;
     private String fieldTxt2;
+    private java.util.Map<JButton, Component> buttonComponentMap = new java.util.HashMap<>();
+    private java.util.Map<JButton, String[]> buttonFieldTextMap = new java.util.HashMap<>();
+    
+    private void updateCircuitTotals() {
+        Calculations.CircuitType circuitType = Calculations.CircuitType.SERIES;
+        if (circuitCheckField != null) {
+            String text = circuitCheckField.getText();
+            if (text != null && text.toLowerCase().contains("parallel")) {
+                circuitType = Calculations.CircuitType.PARALLEL;
+            }
+        }
+        Calculations.Result result = Calculations.calculateTotals(buttonComponentMap.values(), circuitType);
+        voltLabel.setText(String.format("Voltage: %.2f V", result.getTotalVoltage()));
+        resLabel.setText(String.format("Resistance: %.2f \u03a9", result.getTotalResistance()));
+        curntLabel.setText(String.format("Current: %.2f A", result.getTotalCurrent()));
+        powLabel.setText(String.format("Power: %.2f W", result.getTotalPower()));
+    }
     
     /**
      * Creates new form BuildScreen
@@ -262,7 +279,6 @@ public class BuildScreen extends javax.swing.JFrame {
 
         curntLabel.setForeground(new java.awt.Color(255, 255, 255));
         curntLabel.setText("Current: ");
-
         resLabel.setForeground(new java.awt.Color(255, 255, 255));
         resLabel.setText("Resistance: ");
 
@@ -419,6 +435,7 @@ public class BuildScreen extends javax.swing.JFrame {
                 }
                 
                 checkCircuitType();
+                updateCircuitTotals();
                 
                 switch(componentChoice.getSelectedItem()){
                     case "Resistor":
@@ -489,6 +506,7 @@ public class BuildScreen extends javax.swing.JFrame {
                         Switch switchComp = new Switch(midPos, component);
                         fieldTxt1 = switchComp.getDirection();
                         fieldTxt2 = switchComp.getState();
+                        comp = switchComp;
                         break;
                     case "Power Supply":
                         component.setText("Power Supply");
@@ -502,14 +520,24 @@ public class BuildScreen extends javax.swing.JFrame {
                         break;
                 }
                 
+                if (comp != null) {
+                    buttonComponentMap.put(component, comp);
+                    buttonFieldTextMap.put(component, new String[]{fieldTxt1, fieldTxt2});
+                }
+                
                 component.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent e) {
                         JDialog componentDialog = new JDialog(BuildScreen.this, "Component", true);
                         componentDialog.setLayout(new FlowLayout());
+                        Component thisComp = buttonComponentMap.get(component);
+                        String[] texts = buttonFieldTextMap.get(component);
+                        String localField1 = texts != null ? texts[0] : "";
+                        String localField2 = texts != null ? texts[1] : "";
+                        
                         JTextField field1 = new JTextField(10);
-                        field1.setText(fieldTxt1);
+                        field1.setText(localField1);
                         JTextField field2 = new JTextField(10);
-                        field2.setText(fieldTxt2);
+                        field2.setText(localField2);
                         JButton deleteBtn = new JButton("Trash");
                         deleteBtn.setBackground(Color.RED);
                         deleteBtn.setForeground(Color.WHITE);
@@ -518,14 +546,41 @@ public class BuildScreen extends javax.swing.JFrame {
                         editBtn.setForeground(Color.WHITE);
                         
                         JPanel panel = new JPanel();
-                        panel.add(comp.field1); panel.add(field1);
-                        panel.add(comp.field2); panel.add(field2);
+                        if (thisComp != null) {
+                            panel.add(thisComp.field1); panel.add(field1);
+                            panel.add(thisComp.field2); panel.add(field2);
+                        } else {
+                            panel.add(field1);
+                            panel.add(field2);
+                        }
                         panel.add(editBtn);
                         panel.add(deleteBtn);
                         
                         componentDialog.add(panel);
                         componentDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                         componentDialog.pack();
+                        
+                        editBtn.addActionListener(new java.awt.event.ActionListener() {
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                String newField1 = field1.getText();
+                                String newField2 = field2.getText();
+                                
+                                if (thisComp != null) {
+                                    try {
+                                        if (thisComp instanceof Resistor) {
+                                            ((Resistor) thisComp).setResistance(Integer.parseInt(newField1));
+                                        } else if (thisComp instanceof PowerSource) {
+                                            ((PowerSource) thisComp).setVoltageOut(Double.parseDouble(newField1));
+                                        }
+                                    } catch (NumberFormatException ignore) {
+                                        
+                                    }
+                                }
+                                
+                                buttonFieldTextMap.put(component, new String[]{newField1, newField2});
+                                updateCircuitTotals();
+                            }
+                        });
                         
                         deleteBtn.addActionListener(new java.awt.event.ActionListener() {
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -534,6 +589,8 @@ public class BuildScreen extends javax.swing.JFrame {
                                     componentIntersections.remove(intersections[0]);
                                     componentIntersections.remove(intersections[1]);
                                     componentMap.remove(component);
+                                    buttonComponentMap.remove(component);
+                                    buttonFieldTextMap.remove(component);
                                     
                                     ComponentNode prev = null;
                                     ComponentNode current = circuitHead;
@@ -567,6 +624,7 @@ public class BuildScreen extends javax.swing.JFrame {
                                 componentDialog.dispose();
                                 jPanel2.repaint();
                                 checkCircuitType();
+                                updateCircuitTotals();
                             }
                         });
                         
