@@ -3,8 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.ohmwards;
-
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import java.nio.file.*;
 import java.io.*;
@@ -155,11 +153,8 @@ public class LoginScreen extends javax.swing.JFrame {
            // Checks if account exists
            if(!Ohmwards.saveDatabase.findAccount(usernameField.getText().strip())) {
                 JOptionPane.showMessageDialog(null, "Account does not exist, Try again or create new account!", "Error", JOptionPane.ERROR_MESSAGE); 
-           } else if(Ohmwards.saveDatabase.verifyAccount(usernameField.getText().strip(),  passwordField.getText().strip())) { 
-                ArrayList<Circuit> circuit = new ArrayList<>();
-                // Add circuits to circuit (for later...)
-                            
-                User newUser = new User(usernameField.getText().strip(), passwordField.getText().strip(), circuit);
+           } else if(Ohmwards.saveDatabase.verifyAccount(usernameField.getText().strip(),  passwordField.getText().strip())) {              
+                User newUser = new User(usernameField.getText().strip(), passwordField.getText().strip());
                 Ohmwards.currUser = newUser;
                 HomePage menu = new HomePage();
                 menu.setVisible(true);
@@ -169,7 +164,7 @@ public class LoginScreen extends javax.swing.JFrame {
             else{
                 JOptionPane.showMessageDialog(null, "Invalid password, try again...", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
-                    }
+                }
         }
     }//GEN-LAST:event_loginBtnActionPerformed
 
