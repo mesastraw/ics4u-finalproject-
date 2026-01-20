@@ -112,10 +112,24 @@ public class BuildScreen extends javax.swing.JFrame {
      * Custom JPanel that displays a visual grid with dots at intersections
      */
     private class GridPanel extends javax.swing.JPanel {
-        private static final double GRID_SIZE = 70;
+        private static final double BASE_GRID_SIZE = 70;
         private static final int DOT_SIZE = 8; 
         private static final int CLICK_TOLERANCE = 10;
+        private double zoomFactor = 1.0;
         private java.util.List<java.awt.Point> componentIntersections;
+        
+        public double getGridSize() {
+            return BASE_GRID_SIZE * zoomFactor;
+        }
+        
+        public void setZoomFactor(double factor) {
+            zoomFactor = Math.max(0.5, Math.min(3.0, factor));
+            repaint();
+        }
+        
+        public double getZoomFactor() {
+            return zoomFactor;
+        }
         
         public void setComponentIntersections(java.util.List<java.awt.Point> intersections) {
             this.componentIntersections = intersections;
@@ -124,18 +138,24 @@ public class BuildScreen extends javax.swing.JFrame {
         public GridPanel() {
             setBackground(new java.awt.Color(255, 255, 255));
             setOpaque(true);
-            // Enable mouse events for intersection clicks
             setFocusable(true);
+            
+            addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+                @Override
+                public void mouseWheelMoved(java.awt.event.MouseWheelEvent e) {
+                    double zoomDelta = e.getWheelRotation() < 0 ? 1.1 : 0.9;
+                    setZoomFactor(zoomFactor * zoomDelta);
+                }
+            });
         }
         
         public java.awt.Point getIntersectionAt(int screenX, int screenY) {
-            // Find nearest grid intersection
-            int gridX = (int) (Math.round(screenX / GRID_SIZE) * GRID_SIZE);
-            int gridY = (int) (Math.round(screenY / GRID_SIZE) * GRID_SIZE);
+            double gridSize = getGridSize();
+            int gridX = (int) (Math.round(screenX / gridSize) * gridSize);
+            int gridY = (int) (Math.round(screenY / gridSize) * gridSize);
             
-            // Check click within tolerance of an intersection
             double distance = Math.sqrt(Math.pow(screenX - gridX, 2) + Math.pow(screenY - gridY, 2));
-            if (distance <= CLICK_TOLERANCE) {
+            if (distance <= CLICK_TOLERANCE * zoomFactor) {
                 return new java.awt.Point(gridX, gridY);
             }
             return null;
@@ -144,8 +164,9 @@ public class BuildScreen extends javax.swing.JFrame {
         
         public java.awt.Point getGridCoordinates(java.awt.Point intersection) {
             if (intersection == null) return null;
-            int col = (int) (intersection.x / GRID_SIZE);
-            int row = (int) (intersection.y / GRID_SIZE);
+            double gridSize = getGridSize();
+            int col = (int) (intersection.x / gridSize);
+            int row = (int) (intersection.y / gridSize);
             return new java.awt.Point(col, row);
         }
         
@@ -153,10 +174,11 @@ public class BuildScreen extends javax.swing.JFrame {
             if (componentIntersections == null || componentIntersections.isEmpty()) {
                 return true;
             }
+            double gridSize = getGridSize();
             for (java.awt.Point intersection : componentIntersections) {
                 double dx = Math.abs(x - intersection.x);
                 double dy = Math.abs(y - intersection.y);
-                if ((dx == GRID_SIZE && dy == 0) || (dx == 0 && dy == GRID_SIZE)) {
+                if ((dx == gridSize && dy == 0) || (dx == 0 && dy == gridSize)) {
                     return true;
                 }
             }
@@ -175,35 +197,32 @@ public class BuildScreen extends javax.swing.JFrame {
             
             java.awt.Graphics2D g2d = (java.awt.Graphics2D) g.create();
             try {
-                // anti-aliasing for smoother lines
+                double gridSize = getGridSize();
+                
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
                                     java.awt.RenderingHints.VALUE_ANTIALIAS_OFF);
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_STROKE_CONTROL,
                                     java.awt.RenderingHints.VALUE_STROKE_PURE);
                 
-                // Draw grid lines
                 g2d.setColor(new java.awt.Color(150, 150, 150));
                 g2d.setStroke(new java.awt.BasicStroke(1.0f));
                 
-                // Draw vertical lines
-                for (double x = 0; x <= width; x += GRID_SIZE) {
+                for (double x = 0; x <= width; x += gridSize) {
                     int lineX = (int) x;
                     g2d.drawLine(lineX, 0, lineX, height);
                 }
                 
-                // Draw horizontal lines 
-                for (double y = 0; y <= height; y += GRID_SIZE) {
+                for (double y = 0; y <= height; y += gridSize) {
                     int lineY = (int) y;
                     g2d.drawLine(0, lineY, width, lineY);
                 }
                 
-                // Draw dots at each intersection
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
                                     java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
                 g2d.setColor(new java.awt.Color(0, 100, 255));
                 
-                for (double x = 0; x <= width; x += GRID_SIZE) {
-                    for (double y = 0; y <= height; y += GRID_SIZE) {
+                for (double x = 0; x <= width; x += gridSize) {
+                    for (double y = 0; y <= height; y += gridSize) {
                         boolean shouldDraw = false;
                         
                         if (componentIntersections == null || componentIntersections.isEmpty()) {
@@ -212,7 +231,7 @@ public class BuildScreen extends javax.swing.JFrame {
                             for (java.awt.Point intersection : componentIntersections) {
                                 double dx = Math.abs(x - intersection.x);
                                 double dy = Math.abs(y - intersection.y);
-                                if ((dx == GRID_SIZE && dy == 0) || (dx == 0 && dy == GRID_SIZE)) {
+                                if ((dx == gridSize && dy == 0) || (dx == 0 && dy == gridSize)) {
                                     shouldDraw = true;
                                     break;
                                 }
