@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.ohmwards;
+
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import java.nio.file.*;
@@ -169,7 +170,6 @@ public class LoginScreen extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Invalid password, try again...", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                     }
-                  }
         }
     }//GEN-LAST:event_loginBtnActionPerformed
 
