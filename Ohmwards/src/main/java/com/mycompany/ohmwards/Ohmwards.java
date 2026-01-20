@@ -3,10 +3,7 @@
  */
 
 package com.mycompany.ohmwards;
-import java.util.ArrayList;
-import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -15,29 +12,20 @@ import java.util.logging.Logger;
 public class Ohmwards {
     public static MainMenu main;
     public static User currUser;
+    public static SaveDatabase saveDatabase;
     public static Circuit circ;
     public static BuildScreen build;
     
-    public static void main(String[] args) {  
-        addAccount("totallyRoland", "vergyIsStronger");
-        addAccount("bongbong", "#bestEmployee");
-        addAccount("heathcliff", "catherine");
+    // Make sure to connect database here
+    public static void main(String[] args) {
+        saveDatabase = new SaveDatabase();
+        
+        saveDatabase.addAccount("totallyRoland", "vergyIsStronger");
+        saveDatabase.addAccount("bongbong", "#bestEmployee");
+        saveDatabase.addAccount("heathcliff", "catherine");
         
         circ = new Circuit();
         main = new MainMenu();
         main.setVisible(true);
-    }
-    
-    public static void addAccount(String username, String password){
-        // Create the file for the account
-        File newAcc = new File(username + ".txt");
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newAcc))) {
-            writer.write(password);
-            writer.newLine();
-            writer.write("[]");
-        } catch (IOException ex) {
-            Logger.getLogger(Ohmwards.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }
